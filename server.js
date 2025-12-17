@@ -6,7 +6,21 @@ const connectDB = require("./config/db");
 const app = express();
 connectDB();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://expensetrackerfrontend1.netlify.app",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
+
+// 👇 THIS IS CRITICAL (preflight fix)
+app.options("*", cors());
+
 app.use(express.json());
 
 app.use("/api/auth", require("./routes/authRoutes"));
